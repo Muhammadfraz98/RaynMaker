@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import App from './App'
 import CoreuiVue from '@coreui/vue'
+import VueCompositionAPI from '@vue/composition-api'
 
+Vue.use(VueCompositionAPI)
 Vue.use(CoreuiVue)
 Vue.config.productionTip = false
 
@@ -26,5 +28,5 @@ const router = new Router({
 
 new Vue({
   router,
-  render: h => h(App)
+  render: (h) => h(App)
 }).$mount('#app')

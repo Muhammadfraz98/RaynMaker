@@ -41,32 +41,39 @@
 </template>
 
 <script>
-  import API from '@/api'
+// importing ref, onMounted, watch from the Vue Composition API
 
-  export default {
-    name: 'Cashflow',
-    data () {
-      return {
-        transactions: null,
-        limit: 25
-      }
-    },
-    created () {
-      this.onLimitChanged()
-    },
-    methods: {
-      async onLimitChanged () {
-        const response = await API.get(`/cashflow?limit=${this.limit}`)
+import { ref, onMounted, watch } from 'vue'
+import API from '@/api'
 
-        this.transactions = response.data
-      }
-    },
-    watch: {
-      limit () {
-        this.onLimitChanged()
-      }
+// a component named CashflowComposition.
+
+export default {
+  name: 'CashflowComposition',
+  // eslint-disable-next-line space-before-function-paren
+  setup() {
+    const transactions = ref(null)
+    const limit = ref(25)
+
+// defined an onLimitChanged function that makes an asynchronous request to fetch data from an API endpoint based on the limit value and updates the transactions variable with the response data
+    const onLimitChanged = async () => {
+      const response = await API.get(`/cashflow?limit=${limit.value}`)
+      transactions.value = response.data
     }
+
+    // using the onMounted hook to call the onLimitChanged function when the component is mounted
+    onMounted(() => {
+      onLimitChanged()
+    })
+
+    // using the watch function to watch for changes to the limit variable and call the onLimitChanged function whenever the limit variable changes
+    watch(limit, () => {
+      onLimitChanged()
+    })
+
+    return { transactions, limit, onLimitChanged }
   }
+}
 </script>
 
 <style scoped>
